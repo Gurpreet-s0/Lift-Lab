@@ -1,4 +1,5 @@
 const userModel = require("../models/user.model");
+const blackListedModel = require("../models/blackList.model")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -69,7 +70,7 @@ async function loginController(req, res) {
   const { email, username, password } = req.body;
   const user = await userModel.findOne({
     $or: [{ username }, { email }],
-  });
+  }).select("+password");
   if (!user) {
     return res.status(400).json({
       message: "Invalid Credentials",
@@ -100,7 +101,40 @@ async function loginController(req, res) {
     })
 }
 
+async function getMeController(req,res){
+    const userId = req.user.id
+    
+    const user = await userModel.findById(userId)
+
+    if(!user){
+        return res.status(400).json({
+            message:"User not found"
+        })
+    }
+
+    res.status(200).json({
+        message:"user fetched successfully",
+        user
+    })
+
+}
+
+async function logOutController(req,res){
+  const token = req.cookies.jwt_token
+  res.clearCookie('jwt_token')
+
+  await blackListedModel.create({
+    token:token
+  })
+  res.status(200).json({
+    message:"LogOut successfully"
+  })
+}
+
+
 module.exports = {
   loginController,
   registerController,
+  getMeController,
+  logOutController
 };
