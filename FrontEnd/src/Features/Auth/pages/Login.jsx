@@ -1,17 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Input from '../components/Input'
 import Button from '../components/Button'
-import {User ,Lock} from 'lucide-react'
-import { Link } from 'react-router'
+import {User ,Lock,Mail} from 'lucide-react'
+import { Link, useNavigate } from 'react-router'
 import Logo from '../components/Logo'
+import UseAuth from '../Hooks/UseAuth'
+import Loading from '../components/Loading'
 
 
 const Login = () => {
+  const [username, setusername] = useState('')
+  const [email, setemail] = useState('')
+  const [password, setpassword] = useState('')
+  const navigate = useNavigate()
+  const {loading,loginHandler} = UseAuth()
+
+  async function formHandler(e) {
+    e.preventDefault()
+    
+    await loginHandler({username,email,password})
+    navigate("/")
+    setusername('')
+    setemail('')
+    setpassword('')
+  }
+
 
   return (
+    loading ? <Loading/> :
    <div className="absolute left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 px-6">
     <Logo/>
-  <div className="bg-card border border-border rounded-2xl p-8 shadow-2xl">
+  <form onSubmit={(e)=>{formHandler(e)}} className="bg-card border border-border rounded-2xl p-8 shadow-2xl">
     
     <div className="mb-8 text-center">
       <h1 className="font-heading text-text text-4xl font-bold">
@@ -27,13 +46,31 @@ const Login = () => {
 
       <div>
         <label className="mb-2 block text-sm font-medium text-text ">
-          Email or Username
+          Username
         </label>
 
         <Input
-          placeholder="Enter email or username"
+        setState={setusername}
+            value={username}
+          placeholder="Enter username"
           type="text"
           sideComponent={<User size={18} color="#C7CDD4" />}
+        />
+      </div>
+
+      <div className='text-text'>Or</div>
+
+       <div>
+        <label className="mb-2 block text-sm font-medium text-text ">
+          Email 
+        </label>
+
+        <Input
+        setState={setemail}
+            value={email}
+          placeholder="Enter email "
+          type="text"
+          sideComponent={<Mail size={18} color="#C7CDD4" />}
         />
       </div>
 
@@ -43,7 +80,9 @@ const Login = () => {
         </label>
 
         <Input
-          placeholder="Enter your password"
+        setState={setpassword}
+            value={password}
+          placeholder="Enter password"
           type="password"
           sideComponent={<Lock size={18} color="#C7CDD4"  />}
         />
@@ -68,7 +107,7 @@ const Login = () => {
       </Link>
     </div>
 
-  </div>
+  </form>
 </div>
   )
 }

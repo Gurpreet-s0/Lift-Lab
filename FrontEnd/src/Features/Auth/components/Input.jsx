@@ -17,7 +17,7 @@ const Input = ({ type, placeholder, sideComponent, value, setState }) => {
         type={type}
         value={value}
         placeholder={placeholder}
-        required
+      
         className="w-full bg-transparent text-text placeholder:text-muted outline-none"
       />
     </div>

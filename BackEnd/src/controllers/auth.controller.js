@@ -36,7 +36,7 @@ async function registerController(req, res) {
     height,
     weight,
     goal,
-    experience,
+    experience
   });
 
   const token = jwt.sign(
@@ -86,48 +86,55 @@ async function loginController(req, res) {
   }
 
   const token = jwt.sign({
-      id: user._id,
-      email: user.email,
-      username: user.username,
-    },process.env.JWT_TOKEN,{expiresIn:"10d"})
+    id: user._id,
+    email: user.email,
+    username: user.username,
+  }, process.env.JWT_TOKEN, { expiresIn: "10d" })
 
-    res.cookie("jwt_token",token)
+  res.cookie("jwt_token", token)
 
-    res.status(200).json({
-        message:"User Logged in",
-        user:{
-            username,email
-        }
-    })
-}
-
-async function getMeController(req,res){
-    const userId = req.user.id
-    
-    const user = await userModel.findById(userId)
-
-    if(!user){
-        return res.status(400).json({
-            message:"User not found"
-        })
+  res.status(200).json({
+    message: "User Logged in",
+    user: {
+      username, 
+      email, 
+      age:user.age,
+      gender:user.gender,
+      height:user.height,
+      weight:user.weight,
+      goal:user.goal,
+      experience:user.experience
     }
+  })
+}
 
-    res.status(200).json({
-        message:"user fetched successfully",
-        user
+async function getMeController(req, res) {
+  const userId = req.user.id
+
+  const user = await userModel.findById(userId)
+
+  if (!user) {
+    return res.status(400).json({
+      message: "User not found"
     })
+  }
+
+  res.status(200).json({
+    message: "user fetched successfully",
+    user
+  })
 
 }
 
-async function logOutController(req,res){
+async function logOutController(req, res) {
   const token = req.cookies.jwt_token
   res.clearCookie('jwt_token')
 
   await blackListedModel.create({
-    token:token
+    token: token
   })
   res.status(200).json({
-    message:"LogOut successfully"
+    message: "LogOut successfully"
   })
 }
 
