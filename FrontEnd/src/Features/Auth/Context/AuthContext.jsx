@@ -1,17 +1,12 @@
 import { useEffect, useState } from "react"
-import { createContext } from "react"
-import UseAuth from "../Hooks/UseAuth"
 import { getMe } from "../Auth.services"
-
-export const AuthContext = createContext()
+import { AuthContext } from "./auth-context"
 
 function AuthContextProvider({children}){
     const [user, setuser] = useState(null)
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(true)
 
     useEffect(() => {
-  setloading(true);
-
   getMe()
     .then((res) => {
       setuser(res.user);

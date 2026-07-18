@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { register, login, getMe, logout } from "../Auth.services"
-import { AuthContext } from "../Context/AuthContext"
+import { AuthContext } from "../Context/auth-context"
 
 function UseAuth(){
 
