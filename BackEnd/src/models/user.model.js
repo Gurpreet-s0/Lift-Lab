@@ -71,9 +71,14 @@ const userSchema = new mongoose.Schema(
         message: "{VALUE} is not a valid experience level",
       },
     },
+
+   workoutSplit: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "WorkoutSplit"
+}
   },
 );
 
-const userModel = mongoose.model("user", userSchema);
+const userModel = mongoose.model("users", userSchema);
 
 module.exports = userModel;
