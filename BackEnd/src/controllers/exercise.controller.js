@@ -2,7 +2,7 @@ const { default: ImageKit } = require("@imagekit/nodejs")
 const exerciseModel = require("../models/exercises.model")
 const splitModel = require("../models/split.model")
 const image_kit = require("@imagekit/nodejs").default
-
+const userModel = require("../models/user.model")
 const client = new image_kit({
     privateKey: process.env.IMAGE_KIT_PRIVATE_KEY
 })
@@ -30,24 +30,84 @@ async function exerciseController(req, res) {
     })
 }
 
+
 async function splitController(req, res) {
-    const { splitName, workoutDays } = req.body
+    try {
+        const { splitName, workoutDays } = req.body
 
-    const workout = await splitModel.create({
-        user: req.user.id,
-        splitName: splitName,
-        workoutDays: workoutDays
-    })
+        if (!splitName || !workoutDays) {
+            return res.status(400).json({
+                message: "Invalid Data"
+            })
+        }
 
-    res.status(201).json({
-        message: "Your Workout Split is created",
-        workout: workout
-    })
+        const existingSplit = await splitModel.findOne({
+            user: req.user.id
+        })
+
+        if (existingSplit) {
+            return res.status(409).json({
+                message: "Split Already Exist"
+            })
+        }
+        const workout = await splitModel.create({
+            user: req.user.id,
+            splitName: splitName,
+            workoutDays: workoutDays
+        })
+
+        await userModel.findByIdAndUpdate(req.user.id, {
+            workoutSplit: workout._id
+        })
+
+        res.status(201).json({
+            success: true,
+            message: "Your Workout Split is created",
+            workout: workout
+        })
+    }
+    catch (err) {
+        console.log(err);
+
+        return res.status(500).json({
+
+            message: "Internal Server Error"
+
+        })
+
+    }
 }
 
+async function getSplitController(req,res){
+    try {
+        const userId = req.user.id
+
+    const split = await splitModel.findOne({
+        user:userId
+    }).populate('workoutDays.exercises.exercise')
+
+    if(!split){
+        return res.status(404).json({
+            message:"Split Not Found"
+        })
+    }
+
+    return res.status(200).json({
+        message:"Split Fetched Successfully",
+        split
+    })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message:"Internal Server Error"
+        })
+        
+    }
+}
 
 
 module.exports = {
     exerciseController,
-    splitController
+    splitController,
+    getSplitController
 }
