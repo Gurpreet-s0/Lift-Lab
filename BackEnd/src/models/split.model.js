@@ -24,7 +24,8 @@ const workoutDaySchema = new mongoose.Schema({
         required: [true, "Day is required"]
     },
     restDay: {
-        type: Boolean
+        type: Boolean,
+        default:false
     },
     workoutName: {
         type: String,

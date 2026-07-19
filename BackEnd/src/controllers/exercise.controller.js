@@ -30,7 +30,6 @@ async function exerciseController(req, res) {
     })
 }
 
-
 async function splitController(req, res) {
     try {
         const { splitName, workoutDays } = req.body
@@ -105,9 +104,48 @@ async function getSplitController(req,res){
     }
 }
 
+async function updateSplitController(req,res){
+    try {
+        const userId = req.user.id
+    const {splitName,workoutDays} = req.body
+
+    const split = await splitModel.findOne({user:userId})
+
+    if (!split) {
+    return res.status(404).json({
+        message: "Split not found"
+    });
+}
+
+   const updatedSplit = await splitModel.findOneAndUpdate(
+    { user: userId },
+    {
+        splitName,
+        workoutDays
+    },
+    {
+        new: true,
+        runValidators: true
+    }
+);
+
+    return res.status(200).json({
+        message:"Split Updated Successfully",
+        updatedSplit
+    })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message:"Internal Server Error"
+        })
+        
+    }
+
+}
 
 module.exports = {
     exerciseController,
     splitController,
-    getSplitController
+    getSplitController,
+    updateSplitController
 }
