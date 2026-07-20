@@ -1,5 +1,5 @@
 const express = require("express")
-const { exerciseController, splitController, getSplitController, updateSplitController } = require("../controllers/exercise.controller")
+const { exerciseController, splitController, getSplitController, updateSplitController, getTodaySplitController } = require("../controllers/exercise.controller")
 const exerciseRouter = express.Router()
 const multer = require("multer")
 const identifyUser = require("../middleware/auth.middleware")
@@ -11,5 +11,6 @@ exerciseRouter.post("/upload_exercise",upload.single("exerciseImage"),exerciseCo
 exerciseRouter.post("/upload_split",identifyUser,splitController)
 exerciseRouter.get("/getSplit",identifyUser,getSplitController)
 exerciseRouter.patch("/updateSplit",identifyUser,updateSplitController)
+exerciseRouter.get("/getTodaySplit",identifyUser,getTodaySplitController)
 
 module.exports = exerciseRouter

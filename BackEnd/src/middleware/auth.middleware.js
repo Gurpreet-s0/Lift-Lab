@@ -10,15 +10,15 @@ async function identifyUser(req,res,next) {
     });
   }
 
-  const isTokenBlackListed = await blackListedModel.findOne({
-    token:token
-  })
+  // const isTokenBlackListed = await blackListedModel.findOne({
+  //   token:token
+  // })
 
-  if(isTokenBlackListed){
-    return res.status(401).json({
-      message:"unauthorized token"
-    })
-  }
+  // if(isTokenBlackListed){
+  //   return res.status(401).json({
+  //     message:"unauthorized token"
+  //   })
+  // }
 
   let decoded;
   try {

@@ -3,6 +3,7 @@ const exerciseModel = require("../models/exercises.model")
 const splitModel = require("../models/split.model")
 const image_kit = require("@imagekit/nodejs").default
 const userModel = require("../models/user.model")
+
 const client = new image_kit({
     privateKey: process.env.IMAGE_KIT_PRIVATE_KEY
 })
@@ -77,68 +78,99 @@ async function splitController(req, res) {
     }
 }
 
-async function getSplitController(req,res){
+async function getSplitController(req, res) {
     try {
         const userId = req.user.id
 
-    const split = await splitModel.findOne({
-        user:userId
-    }).populate('workoutDays.exercises.exercise')
+        const split = await splitModel.findOne({
+            user: userId
+        }).populate('workoutDays.exercises.exercise')
 
-    if(!split){
-        return res.status(404).json({
-            message:"Split Not Found"
+        if (!split) {
+            return res.status(404).json({
+                message: "Split Not Found"
+            })
+        }
+
+        return res.status(200).json({
+            message: "Split Fetched Successfully",
+            split
         })
-    }
-
-    return res.status(200).json({
-        message:"Split Fetched Successfully",
-        split
-    })
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message:"Internal Server Error"
+            message: "Internal Server Error"
         })
-        
+
     }
 }
 
-async function updateSplitController(req,res){
+async function updateSplitController(req, res) {
     try {
         const userId = req.user.id
-    const {splitName,workoutDays} = req.body
+        const { splitName, workoutDays } = req.body
 
-    const split = await splitModel.findOne({user:userId})
+        const split = await splitModel.findOne({ user: userId })
 
-    if (!split) {
-    return res.status(404).json({
-        message: "Split not found"
-    });
-}
+        if (!split) {
+            return res.status(404).json({
+                message: "Split not found"
+            });
+        }
 
-   const updatedSplit = await splitModel.findOneAndUpdate(
-    { user: userId },
-    {
-        splitName,
-        workoutDays
-    },
-    {
-        new: true,
-        runValidators: true
-    }
-);
+        const updatedSplit = await splitModel.findOneAndUpdate(
+            { user: userId },
+            {
+                splitName,
+                workoutDays
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        );
 
-    return res.status(200).json({
-        message:"Split Updated Successfully",
-        updatedSplit
-    })
+        return res.status(200).json({
+            message: "Split Updated Successfully",
+            updatedSplit
+        })
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message:"Internal Server Error"
+            message: "Internal Server Error"
         })
-        
+
+    }
+
+}
+
+async function getTodaySplitController(req, res) {
+    try {
+        const userId = req.user.id
+        const day = new Date().getDay() || 7
+        const split = await splitModel.findOne({ user: userId }).populate("workoutDays.exercises.exercise")
+        if (!split) {
+            return res.status(404).json({
+                message: "Workout split not found"
+            });
+        }
+        const todayExercises = split.workoutDays.find((e) => { return e.day == day })
+        if (!todayExercises) {
+            return res.status(404).json({
+                message: "No workout scheduled for today"
+            });
+        }
+        return res.status(200).json({
+            message: "Todays Exercises Fetched Successfully",
+            todayExercises
+        })
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: "Internal Server Error"
+        })
+
     }
 
 }
@@ -147,5 +179,6 @@ module.exports = {
     exerciseController,
     splitController,
     getSplitController,
-    updateSplitController
+    updateSplitController,
+    getTodaySplitController
 }
