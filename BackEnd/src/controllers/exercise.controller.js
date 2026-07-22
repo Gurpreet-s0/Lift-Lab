@@ -175,6 +175,8 @@ async function getTodaySplitController(req, res) {
 
 }
 
+
+
 module.exports = {
     exerciseController,
     splitController,

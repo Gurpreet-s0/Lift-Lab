@@ -36,7 +36,7 @@ const workoutDaySchema = new mongoose.Schema({
 
 const splitSchema = new mongoose.Schema({
     user: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref:"users",
         required:[true,"User is required"],
         unique:true
