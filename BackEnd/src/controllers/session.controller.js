@@ -1,0 +1,98 @@
+const exerciseModel = require("../models/exercises.model")
+const splitModel = require("../models/split.model")
+const workoutSessionModel = require("../models/workoutsession.model")
+
+async function startSessionController(req, res) {
+    try {
+        const user = req.user.id
+        const { workoutName, workoutSplit } = req.body
+
+        if (!workoutName || !workoutSplit) {
+            return res.status(400).json({
+                message: "Workout Name or Workout Session must be given"
+            })
+        }
+        const isSplitValid = await splitModel.findOne({
+            _id: workoutSplit,
+            user
+        })
+
+        if (!isSplitValid) {
+            return res.status(404).json({
+                message: "Your Split is not valid"
+            })
+        }
+
+        const session = await workoutSessionModel.create({
+            user,
+            workoutName,
+            workoutSplit,
+            startedAt: Date.now(),
+        })
+
+        return res.status(201).json({
+            message: "A Session is created",
+            sessionId: session._id
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+
+}
+
+async function logSessionController(req, res) {
+    try {
+        const user = req.user.id
+        const {exercise,sets} = req.body
+        const sessionId = req.params.sessionId
+
+        const session  = await workoutSessionModel.findOne({
+            user:user,
+            _id:sessionId
+        })
+
+        if(!session){
+            return res.status(404).json({
+                message:"Session is Invalid"
+            })
+        }
+        if (session.completed) {
+    return res.status(400).json({
+        message: "Workout session is already completed."
+    });
+}
+        const isExerciseValid = await exerciseModel.findById(exercise)
+        
+        if(!isExerciseValid){
+            return res.status(400).json({
+                message:"Not a valid Exercise"
+            })
+        }
+
+        session.exercisesDone.push({
+            exercise,
+            sets
+        })
+        await session.save()
+        
+        res.status(200).json({
+            message:"Exercises Logged Successfully",
+            session
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+}
+
+module.exports = {
+    startSessionController,
+    logSessionController
+}
