@@ -53,6 +53,10 @@ const workoutSessionSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    duration:{
+        type:Number,
+        default:0
+    },
     exercisesDone:[workoutLogSchema]
 },{timestamps:true})
 

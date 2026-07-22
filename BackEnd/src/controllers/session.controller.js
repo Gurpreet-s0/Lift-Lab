@@ -47,29 +47,29 @@ async function startSessionController(req, res) {
 async function logSessionController(req, res) {
     try {
         const user = req.user.id
-        const {exercise,sets} = req.body
+        const { exercise, sets } = req.body
         const sessionId = req.params.sessionId
 
-        const session  = await workoutSessionModel.findOne({
-            user:user,
-            _id:sessionId
+        const session = await workoutSessionModel.findOne({
+            user: user,
+            _id: sessionId
         })
 
-        if(!session){
+        if (!session) {
             return res.status(404).json({
-                message:"Session is Invalid"
+                message: "Session is Invalid"
             })
         }
         if (session.completed) {
-    return res.status(400).json({
-        message: "Workout session is already completed."
-    });
-}
-        const isExerciseValid = await exerciseModel.findById(exercise)
-        
-        if(!isExerciseValid){
             return res.status(400).json({
-                message:"Not a valid Exercise"
+                message: "Workout session is already completed."
+            });
+        }
+        const isExerciseValid = await exerciseModel.findById(exercise)
+
+        if (!isExerciseValid) {
+            return res.status(400).json({
+                message: "Not a valid Exercise"
             })
         }
 
@@ -78,9 +78,9 @@ async function logSessionController(req, res) {
             sets
         })
         await session.save()
-        
+
         res.status(200).json({
-            message:"Exercises Logged Successfully",
+            message: "Exercises Logged Successfully",
             session
         })
 
@@ -92,7 +92,48 @@ async function logSessionController(req, res) {
     }
 }
 
+async function finishSessionController(req, res) {
+    try {
+        const sessionId = req.params.sessionId
+        const user = req.user.id
+
+        const session = await workoutSessionModel.findOne({
+            user,
+            _id: sessionId
+        })
+        if(!session){
+            return res.status(404).json({
+                message:"Session not found"
+            })
+        }
+
+        if (session.completed) {
+            return res.status(400).json({
+                message: "Session is already finished"
+            })
+        }
+
+        session.completed = true
+        session.endedAt = Date.now()
+        const totalTime = Math.floor((session.endedAt - session.startedAt) / 1000 / 60)
+        session.duration = totalTime
+        await session.save()
+
+        res.status(200).json({
+            message: "Session is Finished successfully",
+            totalTime,
+            session
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+}
+
 module.exports = {
     startSessionController,
-    logSessionController
+    logSessionController,
+    finishSessionController
 }
