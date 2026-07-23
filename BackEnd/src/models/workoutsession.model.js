@@ -49,9 +49,11 @@ const workoutSessionSchema = new mongoose.Schema({
         type:Date,
         default:null
     },
-    completed:{
-        type:Boolean,
-        default:false
+    status:{
+        type:String,
+        enum:["Active","Completed","Cancelled"],
+        default:"Active",
+        required:true
     },
     duration:{
         type:Number,

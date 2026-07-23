@@ -101,9 +101,9 @@ async function finishSessionController(req, res) {
             user,
             _id: sessionId
         })
-        if(!session){
+        if (!session) {
             return res.status(404).json({
-                message:"Session not found"
+                message: "Session not found"
             })
         }
 
@@ -113,7 +113,7 @@ async function finishSessionController(req, res) {
             })
         }
 
-        session.completed = true
+        session.status = "Completed"
         session.endedAt = Date.now()
         const totalTime = Math.floor((session.endedAt - session.startedAt) / 1000 / 60)
         session.duration = totalTime
@@ -132,8 +132,80 @@ async function finishSessionController(req, res) {
     }
 }
 
+async function cancelSessionController(req, res) {
+    try {
+        const sessionId = req.params.sessionId
+        const user = req.user.id
+        const session = await workoutSessionModel.findOne({
+            user,
+            _id: sessionId
+        })
+
+        if (!session) {
+            return res.status(404).json({
+                message: "Session is not active"
+            })
+        }
+
+        if (session.status == "Completed") {
+            return res.status(400).json({
+                message: "Session is Completed"
+            })
+        }
+
+        if (session.status == "Cancelled") {
+            return res.status(400).json({
+                message: "Session is Already Cancelled"
+            })
+        }
+
+        session.status = "Cancelled"
+        session.endedAt = Date.now()
+        session.duration = Math.floor((session.endedAt - session.startedAt) / 1000 / 60)
+        await session.save()
+
+        res.status(200).json({
+            message: "Workout session cancelled successfully.",
+            session,
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+}
+
+async function activeSessionController(req, res) {
+    try {
+        const user = req.user.id
+         const session = await workoutSessionModel.findOne({
+            user,
+            status:"Active"
+         })
+         if(!session){
+            return res.status(404).json({
+                message:"No active workout session found."
+            })
+         }
+
+         res.status(200).json({
+            message:"Active Session Fetched Successfully",
+            sessionId:session._id
+         })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+}
+
+
 module.exports = {
     startSessionController,
     logSessionController,
-    finishSessionController
+    finishSessionController,
+    cancelSessionController,
+    activeSessionController
 }
