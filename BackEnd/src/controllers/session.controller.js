@@ -179,20 +179,20 @@ async function cancelSessionController(req, res) {
 async function activeSessionController(req, res) {
     try {
         const user = req.user.id
-         const session = await workoutSessionModel.findOne({
+        const session = await workoutSessionModel.findOne({
             user,
-            status:"Active"
-         })
-         if(!session){
+            status: "Active"
+        })
+        if (!session) {
             return res.status(404).json({
-                message:"No active workout session found."
+                message: "No active workout session found."
             })
-         }
+        }
 
-         res.status(200).json({
-            message:"Active Session Fetched Successfully",
-            sessionId:session._id
-         })
+        res.status(200).json({
+            message: "Active Session Fetched Successfully",
+            sessionId: session._id
+        })
     } catch (error) {
         console.log(error);
         return res.status(500).json({
@@ -201,11 +201,79 @@ async function activeSessionController(req, res) {
     }
 }
 
+async function getHistorySessionsController(req, res) {
+    try {
+        const page = Number(req.query.page) || 1
+        const limit = Number(req.query.limit) || 20
+        const user = req.user.id
+        const skip = (page - 1) * limit
+
+        const totalSessions = await workoutSessionModel.countDocuments({user})
+        const totalPages = Math.ceil(totalSessions/limit)
+
+        const sessions = await workoutSessionModel.find({user})
+        .skip(skip)
+        .limit(limit)
+        .sort({ startedAt: -1 })
+        .select("_id workoutName status duration startedAt endedAt")
+
+        if(!sessions){
+            return res.status(200).json({
+                message:"Start Your Workout Today",
+                sessions:[]
+            })
+        }
+
+        res.status(200).json({
+            message: "Old Sessions are Fetched Successfully",
+            sessions,
+            totalSessions,
+            totalPages
+        })
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+
+}
+
+async function getSessionController(req,res){
+    try {
+        const user = req.user.id
+    const sessionId = req.params.sessionId
+
+    const session = await workoutSessionModel.findOne({
+        user,
+        _id:sessionId
+    }).populate("exercisesDone.exercise")
+
+    if(!session){
+        return res.status(404).json({
+            message:"Not any session found"
+        })
+    }
+
+    res.status(200).json({
+        message:"Session Fetched Successfully",
+        session
+    })
+    } catch (error) {
+         console.log(error);
+        return res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+}
 
 module.exports = {
     startSessionController,
     logSessionController,
     finishSessionController,
     cancelSessionController,
-    activeSessionController
+    activeSessionController,
+    getHistorySessionsController,
+    getSessionController
 }
