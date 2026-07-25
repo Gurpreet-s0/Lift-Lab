@@ -31,7 +31,7 @@ async function exerciseController(req, res) {
     })
 }
 
-async function splitController(req, res) {
+async function uploadSplitController(req, res) {
     try {
         const { splitName, workoutDays } = req.body
 
@@ -179,7 +179,7 @@ async function getTodaySplitController(req, res) {
 
 module.exports = {
     exerciseController,
-    splitController,
+    uploadSplitController,
     getSplitController,
     updateSplitController,
     getTodaySplitController

@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { register, login, getMe, logout } from "../Auth.services"
+import { register, login, getMe, logout, uploadSplit } from "../Auth.services"
 import { AuthContext } from "../Context/auth-context"
 
 function UseAuth(){
@@ -56,7 +56,14 @@ function logOutHandler(){
         });
 }
     
-return {user,loading,registerHandler,loginHandler,getMeHandler,logOutHandler}
+function uploadSplitHandler({splitName, workoutDays}){
+    setloading(true)
+    return uploadSplit({splitName,workoutDays})
+    .then(()=>getMeHandler())
+    .finally(()=>setloading(false))
+}
+
+return {user,loading,registerHandler,loginHandler,getMeHandler,logOutHandler,uploadSplitHandler}
 }
 
 export default UseAuth;

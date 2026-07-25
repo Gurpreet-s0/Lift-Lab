@@ -27,8 +27,7 @@ const Register = () => {
       username, email, password, age, gender, height, weight, goal,experience
     })
 
-    navigate('/')
-
+    navigate('/register/enterSplit')
 
     setusername("")
     setage("")

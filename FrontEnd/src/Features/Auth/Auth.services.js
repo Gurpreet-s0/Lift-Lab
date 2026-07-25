@@ -68,3 +68,14 @@ export async function logout(){
     throw err.response?.data || err;
 }
 }
+
+export async function uploadSplit(splitName, workoutDays){
+    try {
+        const res = await api.post("/upload_split",{
+            splitName,workoutDays
+        })
+        return res.data
+    } catch (err) {
+    throw err.response?.data || err;
+    }
+}
