@@ -1,10 +1,10 @@
 import { useContext } from "react"
-import { register, login, getMe, logout, uploadSplit } from "../Auth.services"
+import { register, login, getMe, logout, uploadSplit, getExercises } from "../Auth.services"
 import { AuthContext } from "../Context/auth-context"
 
 function UseAuth(){
 
-const { user, setuser, loading, setloading } = useContext(AuthContext)
+const { user, setuser, loading, setloading, exercises, setexercises, selectedSplit, setSelectedSplit } = useContext(AuthContext)
 
 function registerHandler({
     username,
@@ -63,7 +63,12 @@ function uploadSplitHandler({splitName, workoutDays}){
     .finally(()=>setloading(false))
 }
 
-return {user,loading,registerHandler,loginHandler,getMeHandler,logOutHandler,uploadSplitHandler}
+function getExercisesHandler(){
+    getExercises()
+    .then((res)=>setexercises(res.exercises))
+}
+
+return {user,loading,registerHandler,loginHandler,getMeHandler,logOutHandler,uploadSplitHandler,getExercisesHandler,exercises, selectedSplit, setSelectedSplit}
 }
 
 export default UseAuth;

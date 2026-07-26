@@ -30,52 +30,61 @@ export async function register({
         })
         return res.data
     }
-    catch(err){
-    throw err.response?.data || err;
+    catch (err) {
+        throw err.response?.data || err;
+    }
 }
-  }
 
-export async function login({username,email,password}){
-    try{
-        const res = await api.post("/api/auth/login",{
-            email:email,
-            username:username,
-            password:password
+export async function login({ username, email, password }) {
+    try {
+        const res = await api.post("/api/auth/login", {
+            email: email,
+            username: username,
+            password: password
         })
         return res.data
     }
-    catch(err){
-    throw err.response?.data || err;
-}
+    catch (err) {
+        throw err.response?.data || err;
+    }
 }
 
-export async function getMe(){
-    try{
+export async function getMe() {
+    try {
         const res = await api.get("/api/auth/getMe")
         return res.data
     }
-    catch(err){
-    throw err.response?.data || err;
-}
+    catch (err) {
+        throw err.response?.data || err;
+    }
 }
 
-export async function logout(){
-     try{
+export async function logout() {
+    try {
         const res = await api.get("/api/auth/logout")
         return res.data
     }
-    catch(err){
-    throw err.response?.data || err;
-}
+    catch (err) {
+        throw err.response?.data || err;
+    }
 }
 
-export async function uploadSplit(splitName, workoutDays){
+export async function uploadSplit(splitName, workoutDays) {
     try {
-        const res = await api.post("/upload_split",{
-            splitName,workoutDays
+        const res = await api.post("api/exercise/upload_split", {
+            splitName, workoutDays
         })
         return res.data
     } catch (err) {
-    throw err.response?.data || err;
+        throw err.response?.data || err;
+    }
+}
+
+export async function getExercises() {
+    try {
+        const res = await api.get("api/exercise/getExercises")
+        return res.data
+    } catch (err) {
+        throw err.response?.data || err;
     }
 }

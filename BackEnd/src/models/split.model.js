@@ -43,7 +43,7 @@ const splitSchema = new mongoose.Schema({
     },
     splitName: {
         type: String,
-        enum:["PPL","Upper Lower PPL","Upper Lower","Bro Split","Full Body","Custom"],
+        enum:["PPL","Upper Lower PPL","Upper Lower","Bro Split","Full Body","Custom Split"],
         required: [true, "Split Name is required"]
     },
     workoutDays:[workoutDaySchema]

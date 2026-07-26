@@ -31,6 +31,15 @@ async function exerciseController(req, res) {
     })
 }
 
+async function getExerciseController(req,res){
+
+    const exercises = await exerciseModel.find()
+
+    res.status(200).json({
+        exercises
+    })
+}
+
 async function uploadSplitController(req, res) {
     try {
         const { splitName, workoutDays } = req.body
@@ -182,5 +191,6 @@ module.exports = {
     uploadSplitController,
     getSplitController,
     updateSplitController,
-    getTodaySplitController
+    getTodaySplitController,
+    getExerciseController
 }
