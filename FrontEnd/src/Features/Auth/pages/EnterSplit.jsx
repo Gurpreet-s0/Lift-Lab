@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import Splits from "../components/Splits";
 import { useNavigate } from "react-router";
 import UseAuth from "../Hooks/UseAuth";
+import { AuthContext } from "../Context/auth-context";
 
 const EnterSplit = () => {
-  const {selectedSplit, setSelectedSplit} = UseAuth()
+  const {selectedSplit, setSelectedSplit} = useContext(AuthContext)
+
 const navigate = useNavigate()
   const splits = [
     {
@@ -58,7 +60,7 @@ const navigate = useNavigate()
         This helps us show you the right workout on the right day.
       </h2>
 
-      <div className="bg-card lg:w-300  w-100 border-2 border-border rounded-2xl flex flex-col items-center pb-10 lg:pb-16 ">
+      <div className="bg-card lg:w-300  w-90 border-2 border-border rounded-2xl flex flex-col items-center pb-10 lg:pb-16 ">
         <h1 className="text-3xl mt-5">Choose your workout split</h1>
 
         <p className="text-text-secondary mb-8">

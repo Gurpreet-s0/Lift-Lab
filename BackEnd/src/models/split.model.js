@@ -7,14 +7,11 @@ const exerciseSchema = new mongoose.Schema({
         required:true
     },
     
-    sets: {
-        type: Number,
-        required: [true, "sets are required"]
-    },
-    reps: {
-        type: String,
-        required:true
-    }
+    // sets: {
+    //     type: Number,
+    //     required: [true, "sets are required"],
+    //     default:3
+    // }
 }, { _id: false })
 
 const workoutDaySchema = new mongoose.Schema({
