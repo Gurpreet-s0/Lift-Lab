@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import UseAuth from '../Hooks/UseAuth'
-import WorkoutCard from '../components/WorkoutCard'
 
 const ConfigureSplit = () => {
     const { exercises, getExercisesHandler, selectedSplit, uploadSplitHandler } = UseAuth()
+
     const days = [
         {
             day: "Monday",
@@ -36,17 +36,18 @@ const ConfigureSplit = () => {
     ]
 
 
-    const [workoutDays, setworkoutDays] = useState([
-        days.map((e)=>({
-            day:e.dayNum,
-            workoutName:"",
-            exercises:[]
+    const [workoutDays, setworkoutDays] = useState(
+        days.map((e) => ({
+            day: e.dayNum,
+            workoutName: "",
+            exercises: []
         }))
-    ])
-    
-    //dayNum
-    const [Exercises, setExercises] = useState([])
-    
+    )
+
+
+
+    const [selectedDay, setselectedDay] = useState(null)
+
 
     const [searchExercise, setsearchExercise] = useState(true)
     const [userSearch, setuserSearch] = useState('')
@@ -76,6 +77,17 @@ const ConfigureSplit = () => {
 
     }
 
+    function removeExercise(exId,selectedDay){
+        const dubArr = [...workoutDays]
+        console.log(dubArr);
+        
+        const updated = dubArr[selectedDay].exercises.filter((item)=>{
+            return item.exercise == exId
+        })
+
+        console.log(updated);
+        
+    }
 
     return (
 
@@ -89,12 +101,75 @@ const ConfigureSplit = () => {
                 <div className="bg-card lg:w-300  w-90 border-2 border-border rounded-2xl flex flex-col items-center pb-10 lg:pb-16 ">
                     <form onSubmit={(e) => formHandler(e)}>
                         {
-                            days.map(({ day }) => {
-                                return <WorkoutCard day={day} searchExercise={searchExercise} setsearchExercise={setsearchExercise}  />
+                            days.map(({ day, dayNum }) => {
+
+                                return <div key={dayNum} className='flex flex-col gap-3 w-80'>
+                                    <h1 className='text-2xl mt-3'>{day}</h1>
+                                    <input onChange={(e) => {
+                                        const updated = [...workoutDays]
+                                        updated[dayNum - 1].workoutName = e.target.value
+                                        setworkoutDays(updated)
+                                        setselectedDay(dayNum - 1)
+                                    }}
+
+                                        value={workoutDays[dayNum - 1].workoutName} className='py-3 px-6 border-border border-2 rounded-2xl mr-2 ' type="text" placeholder='Workout Name eg: Push, Pull, Upper ....' />
+
+                                    <div>
+                                        {
+                                            workoutDays[dayNum - 1]?.exercises.map((exercise) => {
+                                                const selectedExercise = exercises.find((ex) => {
+                                                    return ex._id == exercise.exercise
+                                                })
+
+                                                return (
+                                                    <div
+                                                        key={exercise.exercise}
+                                                        className="bg-background border border-border rounded-xl p-3 flex items-center justify-between hover:border-primary transition"
+                                                    >
+
+                                                        <div className="flex items-center gap-3">
+                                                            <img
+                                                                src={selectedExercise.image}
+                                                                alt={selectedExercise.Name}
+                                                                className="w-14 h-14 rounded-lg object-cover"
+                                                            />
+                                                            <div>
+                                                                <h2 className="font-semibold">
+                                                                    {selectedExercise.Name}
+                                                                </h2>
+                                                                <p className="text-sm text-gray-400">
+                                                                    {selectedExercise.muscleGroup}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <button
+                                                        onClick={()=>{
+                                                            removeExercise(selectedExercise._id,selectedDay)
+                                                        }}
+                                                            type="button"
+                                                            className="text-red-500 hover:text-red-600 text-xl"
+                                                        >
+                                                           ✕
+                                                        </button>
+                                                    </div>
+                                                )
+
+                                            })
+                                        }
+                                    </div>
+
+                                    <button onClick={() => {
+                                        setsearchExercise(!searchExercise)
+                                        setselectedDay(dayNum - 1)
+                                    }} className='mt-4 bg-primary text-white p-3 rounded-2xl hover:opacity-90 transition'>Add Exercise</button>
+                                    <button className='mt-4 bg-primary text-white p-3 rounded-2xl hover:opacity-90 transition'>Save </button>
+                                </div>
 
                             })
                         }
+
                     </form>
+
                 </div>
 
             </div>
@@ -168,13 +243,15 @@ const ConfigureSplit = () => {
 
                                         <button
                                             onClick={() => {
-                                                setExercises([...Exercises, { "exercise": e._id }])
+                                                const updated = [...workoutDays]
+                                                updated[selectedDay].exercises.push({ "exercise": e._id })
+                                                setworkoutDays(updated)
                                             }}
                                             className="mt-4 bg-primary text-white py-2 rounded-lg hover:opacity-90 transition"
                                         >
                                             Add Exercise
                                         </button>
-                                    
+
 
                                     </div>
 
