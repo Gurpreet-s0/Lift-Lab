@@ -105,7 +105,7 @@ const ConfigureSplit = () => {
 
                                 return <div key={dayNum} className='flex flex-col gap-3 w-80'>
                                     <h1 className='text-2xl mt-3'>{day}</h1>
-                                    <input onChange={(e) => {
+                                    <input required onChange={(e) => {
                                         const updated = [...workoutDays]
                                         updated[dayNum - 1].workoutName = e.target.value
                                         setworkoutDays(updated)

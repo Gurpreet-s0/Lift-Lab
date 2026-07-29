@@ -8,6 +8,7 @@ import ProtectedRoutes from './ProtectedRoutes'
 import EnterSplit from '../Features/Setup Split/Pages/EnterSplit'
 import ConfigureSplit from '../Features/Setup Split/Pages/ConfigureSplit'
 import SplitGuard from './SplitGuard'
+import DashBoard from '../Features/DashBoard/Pages/DashBoard'
 
 const Approutes = () => {
   return (
@@ -16,7 +17,7 @@ const Approutes = () => {
       <Route path='/register' element={<PublicRoutes><Register /></PublicRoutes>} />
       <Route path='/enterSplit' element={<ProtectedRoutes><EnterSplit /></ProtectedRoutes>} />
       <Route path='/configureSplit' element={<ProtectedRoutes><ConfigureSplit /></ProtectedRoutes>} />
-      <Route path='/' element={<ProtectedRoutes><SplitGuard><h1 className='text-text'>hey </h1></SplitGuard></ProtectedRoutes>} />
+      <Route path='/dashboard' element={<ProtectedRoutes><SplitGuard><DashBoard/></SplitGuard></ProtectedRoutes>} />
       <Route path='/profile' element={<ProtectedRoutes><SplitGuard><Profile /></SplitGuard></ProtectedRoutes>} />
     </Routes>
   )

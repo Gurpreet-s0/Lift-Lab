@@ -3,7 +3,7 @@ import { ChartLine, Dumbbell, House, Trophy, User } from 'lucide-react'
 import { NavLink } from 'react-router'
 
 const navItems = [
-    { label: 'Home', to: '/', icon: House },
+    { label: 'Home', to: '/dashboard', icon: House },
     { label: 'Workouts', to: '/', icon: Dumbbell },
     { label: 'Stats', to: '/', icon: ChartLine },
     { label: 'Goals', to: '/', icon: Trophy },
