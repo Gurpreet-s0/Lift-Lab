@@ -69,22 +69,3 @@ export async function logout() {
     }
 }
 
-export async function uploadSplit(splitName, workoutDays) {
-    try {
-        const res = await api.post("api/exercise/upload_split", {
-            splitName, workoutDays
-        })
-        return res.data
-    } catch (err) {
-        throw err.response?.data || err;
-    }
-}
-
-export async function getExercises() {
-    try {
-        const res = await api.get("api/exercise/getExercises")
-        return res.data
-    } catch (err) {
-        throw err.response?.data || err;
-    }
-}

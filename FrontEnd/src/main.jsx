@@ -4,11 +4,14 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router'
 import AuthContextProvider from './Features/Auth/Context/AuthContext.jsx'
+import SplitContextProvider from './Features/Setup Split/Context/SplitContext.jsx'
 
 createRoot(document.getElementById('root')).render(
 <BrowserRouter>
 <AuthContextProvider>
-  <App/>
+  <SplitContextProvider>
+    <App/>
+  </SplitContextProvider>
 </AuthContextProvider>
 </BrowserRouter>
 )

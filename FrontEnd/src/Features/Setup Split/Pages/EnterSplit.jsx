@@ -1,13 +1,12 @@
 import React, { useContext } from "react";
-import Splits from "../components/Splits";
+import Splits from "../Components/Splits";
 import { useNavigate } from "react-router";
-import UseAuth from "../Hooks/UseAuth";
-import { AuthContext } from "../Context/auth-context";
+import { SplitContext } from "../Context/SplitContext";
 
 const EnterSplit = () => {
-  const {selectedSplit, setSelectedSplit} = useContext(AuthContext)
+  const { selectedSplit, setSelectedSplit } = useContext(SplitContext)
 
-const navigate = useNavigate()
+  const navigate = useNavigate()
   const splits = [
     {
       splitName: "PPL",
@@ -47,7 +46,7 @@ const navigate = useNavigate()
       return;
     }
 
-    navigate("/register/configureSplit");
+    navigate("/configureSplit");
   };
 
   return (
@@ -82,11 +81,10 @@ const navigate = useNavigate()
       <button
         onClick={handleNext}
         disabled={!selectedSplit}
-        className={`lg:absolute bottom-5 right-20 mt-5 px-6 py-4 rounded-2xl transition-all ${
-          selectedSplit
-            ? "bg-[#27904fbf] text-[#15c95aeb] cursor-pointer"
+        className={`lg:absolute bottom-5 right-20 mt-5 px-6 py-4 rounded-2xl transition-all ${selectedSplit
+            ? " bg-primary text-white cursor-pointer"
             : "bg-gray-700 text-gray-400 cursor-not-allowed"
-        }`}
+          }`}
       >
         Next
       </button>

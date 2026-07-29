@@ -5,8 +5,6 @@ import { AuthContext } from "./auth-context"
 function AuthContextProvider({children}){
     const [user, setuser] = useState(null)
     const [loading, setloading] = useState(true)
-    const [exercises, setexercises] = useState([])
-    const [selectedSplit, setSelectedSplit] = useState(null);
 
     useEffect(() => {
   getMe()
@@ -21,7 +19,7 @@ function AuthContextProvider({children}){
     });
 }, []);
 
-    return <AuthContext.Provider value={{user,setuser,loading,setloading,exercises,setexercises,selectedSplit, setSelectedSplit}}>
+    return <AuthContext.Provider value={{user,setuser,loading,setloading}}>
         {children}
     </AuthContext.Provider>
 }

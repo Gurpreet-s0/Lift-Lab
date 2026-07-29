@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import UseAuth from '../Hooks/UseAuth'
+import UseSplit from '../Hooks/UseSplit'
+import { Navigate, useNavigate } from 'react-router'
 
 const ConfigureSplit = () => {
-    const { exercises, getExercisesHandler, selectedSplit, uploadSplitHandler } = UseAuth()
-
+    const { exercises, getExercisesHandler, selectedSplit, uploadSplitHandler } = UseSplit()
+    const navigate = useNavigate()
     const days = [
         {
             day: "Monday",
@@ -54,7 +55,6 @@ const ConfigureSplit = () => {
 
     useEffect(() => {
         getExercisesHandler()
-
     }, [])
 
     const filteredExercises = exercises.filter((e) => {
@@ -70,23 +70,23 @@ const ConfigureSplit = () => {
         );
     })
 
-    async function formHandler(e) {
-        e.preventDefault()
 
-        // uploadSplitHandler({splitName:workoutName,workoutDays})
-
+    async function uploadSplitHandlerFunc() {
+        await uploadSplitHandler({ splitName: selectedSplit, workoutDays })
+        navigate("/")
     }
 
-    function removeExercise(exId,selectedDay){
-        const dubArr = [...workoutDays]
-        console.log(dubArr);
-        
-        const updated = dubArr[selectedDay].exercises.filter((item)=>{
-            return item.exercise == exId
-        })
+    function removeExercise(exId, selectedDay) {
 
-        console.log(updated);
-        
+        const updated = [...workoutDays];
+
+        updated[selectedDay].exercises =
+            updated[selectedDay].exercises.filter(item =>
+                item.exercise !== exId
+            );
+
+        setworkoutDays(updated);
+
     }
 
     return (
@@ -99,7 +99,7 @@ const ConfigureSplit = () => {
                 </h1>
 
                 <div className="bg-card lg:w-300  w-90 border-2 border-border rounded-2xl flex flex-col items-center pb-10 lg:pb-16 ">
-                    <form onSubmit={(e) => formHandler(e)}>
+                    <div>
                         {
                             days.map(({ day, dayNum }) => {
 
@@ -112,7 +112,7 @@ const ConfigureSplit = () => {
                                         setselectedDay(dayNum - 1)
                                     }}
 
-                                        value={workoutDays[dayNum - 1].workoutName} className='py-3 px-6 border-border border-2 rounded-2xl mr-2 ' type="text" placeholder='Workout Name eg: Push, Pull, Upper ....' />
+                                        value={workoutDays[dayNum - 1].workoutName} className='py-3 px-6 border-border border-2 rounded-2xl mr-2 ' type="text" placeholder='Workout Name eg: Push, Rest, Upper ....' />
 
                                     <div>
                                         {
@@ -143,13 +143,13 @@ const ConfigureSplit = () => {
                                                             </div>
                                                         </div>
                                                         <button
-                                                        onClick={()=>{
-                                                            removeExercise(selectedExercise._id,selectedDay)
-                                                        }}
+                                                            onClick={() => {
+                                                                removeExercise(selectedExercise._id, selectedDay)
+                                                            }}
                                                             type="button"
                                                             className="text-red-500 hover:text-red-600 text-xl"
                                                         >
-                                                           ✕
+                                                            ✕
                                                         </button>
                                                     </div>
                                                 )
@@ -162,16 +162,18 @@ const ConfigureSplit = () => {
                                         setsearchExercise(!searchExercise)
                                         setselectedDay(dayNum - 1)
                                     }} className='mt-4 bg-primary text-white p-3 rounded-2xl hover:opacity-90 transition'>Add Exercise</button>
-                                    <button className='mt-4 bg-primary text-white p-3 rounded-2xl hover:opacity-90 transition'>Save </button>
+
                                 </div>
 
                             })
                         }
+                        <button onClick={(e) => {
+                            uploadSplitHandlerFunc(e)
+                        }} className='mt-8 bg-primary w-80 mb-4 text-white p-3 rounded-2xl hover:opacity-90 transition'>Save </button>
 
-                    </form>
+                    </div>
 
                 </div>
-
             </div>
             <div
                 className={`${searchExercise ? "hidden" : "fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-start pt-10 z-50"

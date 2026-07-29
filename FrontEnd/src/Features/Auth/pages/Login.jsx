@@ -19,7 +19,7 @@ const Login = () => {
     e.preventDefault()
     
     await loginHandler({username,email,password})
-    navigate("/")
+    navigate("/enterSplit")
     setusername('')
     setemail('')
     setpassword('')

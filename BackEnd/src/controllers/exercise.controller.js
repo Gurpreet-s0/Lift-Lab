@@ -31,7 +31,7 @@ async function exerciseController(req, res) {
     })
 }
 
-async function getExerciseController(req,res){
+async function getExerciseController(req, res) {
 
     const exercises = await exerciseModel.find()
 
@@ -43,6 +43,7 @@ async function getExerciseController(req,res){
 async function uploadSplitController(req, res) {
     try {
         const { splitName, workoutDays } = req.body
+
 
         if (!splitName || !workoutDays) {
             return res.status(400).json({
@@ -59,10 +60,27 @@ async function uploadSplitController(req, res) {
                 message: "Split Already Exist"
             })
         }
+
+        const updatedWorkoutDays = workoutDays.map(day => {
+
+            const workoutName = day.workoutName?.trim();
+
+            const isRestDay =
+                !workoutName ||
+                workoutName.toLowerCase() === "rest";
+
+            return {
+                ...day,
+                workoutName: isRestDay ? "Rest" : workoutName,
+                restDay: isRestDay,
+                exercises: isRestDay ? [] : day.exercises
+            };
+        });
+
         const workout = await splitModel.create({
             user: req.user.id,
             splitName: splitName,
-            workoutDays: workoutDays
+            workoutDays: updatedWorkoutDays
         })
 
         await userModel.findByIdAndUpdate(req.user.id, {
@@ -96,8 +114,9 @@ async function getSplitController(req, res) {
         }).populate('workoutDays.exercises.exercise')
 
         if (!split) {
-            return res.status(404).json({
-                message: "Split Not Found"
+            return res.status(200).json({
+                message: "Split Not Found",
+                split: null
             })
         }
 

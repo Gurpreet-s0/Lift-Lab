@@ -26,7 +26,7 @@ const workoutDaySchema = new mongoose.Schema({
     },
     workoutName: {
         type: String,
-        required: [true, "Workout name is required"]
+        default: "Rest"
     },
     exercises: [exerciseSchema]
 },{_id:false})
