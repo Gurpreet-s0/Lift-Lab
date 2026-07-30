@@ -1,19 +1,17 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import UseTodaySplit from '../Hooks/UseTodaySplit'
 import Loading from '../../Auth/components/Loading'
 import { useNavigate } from 'react-router'
 
 const DashBoard = () => {
 
-    const { todaysplit, getTodaySplitHandler } = UseTodaySplit()
+    const { todaysplit } = UseTodaySplit()
     const navigate = useNavigate()
-    useEffect(() => {
-        getTodaySplitHandler()
-    }, [])
-
+  
     if (!todaysplit) {
         return <Loading />;
     }
+console.log(todaysplit);
 
 
     return (

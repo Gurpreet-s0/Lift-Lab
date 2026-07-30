@@ -18,7 +18,7 @@ const Approutes = () => {
       <Route path='/register' element={<PublicRoutes><Register /></PublicRoutes>} />
       <Route path='/enterSplit' element={<ProtectedRoutes><EnterSplit /></ProtectedRoutes>} />
       <Route path='/configureSplit' element={<ProtectedRoutes><ConfigureSplit /></ProtectedRoutes>} />
-      <Route path='/dashboard' element={<ProtectedRoutes><SplitGuard><DashBoard/></SplitGuard></ProtectedRoutes>} />
+      <Route path='/' element={<ProtectedRoutes><SplitGuard><DashBoard/></SplitGuard></ProtectedRoutes>} />
       <Route path='/session' element={<ProtectedRoutes><SplitGuard><Session/></SplitGuard></ProtectedRoutes>} />
       <Route path='/profile' element={<ProtectedRoutes><SplitGuard><Profile /></SplitGuard></ProtectedRoutes>} />
     </Routes>
