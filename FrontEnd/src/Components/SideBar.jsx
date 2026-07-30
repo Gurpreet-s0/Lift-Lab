@@ -4,7 +4,7 @@ import { NavLink } from 'react-router'
 
 const navItems = [
     { label: 'Home', to: '/dashboard', icon: House },
-    { label: 'Workouts', to: '/', icon: Dumbbell },
+    { label: 'Workouts', to: '/session', icon: Dumbbell },
     { label: 'Stats', to: '/', icon: ChartLine },
     { label: 'Goals', to: '/', icon: Trophy },
     { label: 'Profile', to: '/profile', icon: User },

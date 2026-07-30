@@ -3,10 +3,11 @@ import { TodaySplitContext } from "./todaysplit";
 
 const TodaySplitContextProvider = ({children}) => {
     const [todaysplit, settodaysplit] = useState(null)
+    const [splitId, setsplitId] = useState(null)
 
 
   return (
-    <TodaySplitContext.Provider value={{todaysplit,settodaysplit}}>
+    <TodaySplitContext.Provider value={{todaysplit,settodaysplit,splitId,setsplitId}}>
         {children}
     </TodaySplitContext.Provider>
   )

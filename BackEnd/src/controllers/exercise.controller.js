@@ -190,7 +190,8 @@ async function getTodaySplitController(req, res) {
         }
         return res.status(200).json({
             message: "Todays Exercises Fetched Successfully",
-            todayExercises
+            todayExercises,
+            id:split._id
         })
     }
     catch (err) {

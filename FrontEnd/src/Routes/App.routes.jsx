@@ -9,6 +9,7 @@ import EnterSplit from '../Features/Setup Split/Pages/EnterSplit'
 import ConfigureSplit from '../Features/Setup Split/Pages/ConfigureSplit'
 import SplitGuard from './SplitGuard'
 import DashBoard from '../Features/DashBoard/Pages/DashBoard'
+import Session from '../Features/Workout Session/Pages/Session'
 
 const Approutes = () => {
   return (
@@ -18,6 +19,7 @@ const Approutes = () => {
       <Route path='/enterSplit' element={<ProtectedRoutes><EnterSplit /></ProtectedRoutes>} />
       <Route path='/configureSplit' element={<ProtectedRoutes><ConfigureSplit /></ProtectedRoutes>} />
       <Route path='/dashboard' element={<ProtectedRoutes><SplitGuard><DashBoard/></SplitGuard></ProtectedRoutes>} />
+      <Route path='/session' element={<ProtectedRoutes><SplitGuard><Session/></SplitGuard></ProtectedRoutes>} />
       <Route path='/profile' element={<ProtectedRoutes><SplitGuard><Profile /></SplitGuard></ProtectedRoutes>} />
     </Routes>
   )
