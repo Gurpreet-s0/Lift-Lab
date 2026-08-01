@@ -10,6 +10,7 @@ import ConfigureSplit from '../Features/Setup Split/Pages/ConfigureSplit'
 import SplitGuard from './SplitGuard'
 import DashBoard from '../Features/DashBoard/Pages/DashBoard'
 import Session from '../Features/Workout Session/Pages/Session'
+import Workout from '../Features/Workout Session/Pages/Workout'
 
 const Approutes = () => {
   return (
@@ -20,6 +21,7 @@ const Approutes = () => {
       <Route path='/configureSplit' element={<ProtectedRoutes><ConfigureSplit /></ProtectedRoutes>} />
       <Route path='/' element={<ProtectedRoutes><SplitGuard><DashBoard/></SplitGuard></ProtectedRoutes>} />
       <Route path='/session' element={<ProtectedRoutes><SplitGuard><Session/></SplitGuard></ProtectedRoutes>} />
+      <Route path='/workout' element={<SplitGuard><Workout/></SplitGuard>}/>
       <Route path='/profile' element={<ProtectedRoutes><SplitGuard><Profile /></SplitGuard></ProtectedRoutes>} />
     </Routes>
   )
