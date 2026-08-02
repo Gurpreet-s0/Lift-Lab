@@ -11,6 +11,7 @@ import SplitGuard from './SplitGuard'
 import DashBoard from '../Features/DashBoard/Pages/DashBoard'
 import Session from '../Features/Workout Session/Pages/Session'
 import Workout from '../Features/Workout Session/Pages/Workout'
+import FinishWorkout from '../Features/Workout Session/Pages/FinishWorkout'
 
 const Approutes = () => {
   return (
@@ -22,6 +23,7 @@ const Approutes = () => {
       <Route path='/' element={<ProtectedRoutes><SplitGuard><DashBoard/></SplitGuard></ProtectedRoutes>} />
       <Route path='/session' element={<ProtectedRoutes><SplitGuard><Session/></SplitGuard></ProtectedRoutes>} />
       <Route path='/workout' element={<SplitGuard><Workout/></SplitGuard>}/>
+      <Route path='/finishWorkout' element={<SplitGuard><FinishWorkout/></SplitGuard>}/>
       <Route path='/profile' element={<ProtectedRoutes><SplitGuard><Profile /></SplitGuard></ProtectedRoutes>} />
     </Routes>
   )

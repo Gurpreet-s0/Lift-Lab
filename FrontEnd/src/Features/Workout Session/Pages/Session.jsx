@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import UseSession from '../Hooks/UseSession'
 import UseTodaySplit from '../../DashBoard/Hooks/UseTodaySplit'
 import Loading from '../../Auth/components/Loading'
@@ -6,17 +6,19 @@ import { useNavigate } from 'react-router'
 
 
 const Session = () => {
-  const { sessionId, startSessionHandler, sessionLoad } = UseSession()
-  const { todaysplit, splitId } = UseTodaySplit()
+  const {  startSessionHandler, sessionLoad } = UseSession()
+  const { todaysplit, splitId, getTodaySplitHandler } = UseTodaySplit()
   const navigate = useNavigate()
-
+  useEffect(()=>{
+    getTodaySplitHandler()
+  },[])
   return (
     sessionLoad ? <Loading /> :
       <div>
         <div className='bg-card lg:w-300  gap-4 w-90 border-2 border-border rounded-2xl flex flex-col items-center pb-10 lg:pb-16 '>
           <h1 className='text-3xl mt-4'>Your Todays Exercises</h1>
           {
-            todaysplit.exercises.map((e, idx) => {
+            todaysplit?.exercises.map((e, idx) => {
               return <div key={idx} className="w-80 bg-background border border-border rounded-xl p-3 flex items-center justify-between hover:border-primary transition">
                 <div className="flex items-center gap-9">
                   <img

@@ -1,18 +1,50 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL:"http://localhost:3000",
-    withCredentials:true
+    baseURL: "http://localhost:3000",
+    withCredentials: true
 })
 
-export async function startSession({workoutName, workoutSplit}){
+export async function startSession({ workoutName, workoutSplit }) {
     try {
-        const res = await api.post("/api/session/startSession",{
-            workoutName,workoutSplit
+        const res = await api.post("/api/session/startSession", {
+            workoutName, workoutSplit
         })
         return res.data
     } catch (err) {
         console.log(err);
+
+    }
+}
+
+export async function logExercise({ sessionId, exercise, sets }) {
+    try {
+        const res = await api.patch(`/api/session/logExercise/${sessionId}`, {
+            exercise,
+            sets
+        })
+        return res.data
+    } catch (err) {
+        console.log(err);
+
+    }
+}
+
+export async function activeSession(){
+    try {
+        const res = await api.get("/api/session/activeSession")
+        return res.data
+    } catch (err) {
+        console.log(err);
         
+    }
+}
+
+export async function finishSession({sessionId}){
+    try {
+        const res = await api.patch(`/api/session/finish/${sessionId}`)
+        return res.data
+    } catch (err) {
+        console.log(err);
     }
 }

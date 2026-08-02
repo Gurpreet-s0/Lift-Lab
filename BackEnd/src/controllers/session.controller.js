@@ -107,7 +107,7 @@ async function finishSessionController(req, res) {
             })
         }
 
-        if (session.completed) {
+        if (session.status == "Completed" ) {
             return res.status(400).json({
                 message: "Session is already finished"
             })
@@ -121,7 +121,6 @@ async function finishSessionController(req, res) {
 
         res.status(200).json({
             message: "Session is Finished successfully",
-            totalTime,
             session
         })
     } catch (error) {
@@ -184,7 +183,7 @@ async function activeSessionController(req, res) {
             status: "Active"
         })
         if (!session) {
-            return res.status(404).json({
+            return res.status(200).json({
                 message: "No active workout session found."
             })
         }
