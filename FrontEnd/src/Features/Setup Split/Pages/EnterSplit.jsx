@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Splits from "../Components/Splits";
 import { useNavigate } from "react-router";
-import { SplitContext } from "../Context/SplitContext";
+import { SplitContext } from "../Context/splitContext";
 
 const EnterSplit = () => {
   const { selectedSplit, setSelectedSplit } = useContext(SplitContext)
