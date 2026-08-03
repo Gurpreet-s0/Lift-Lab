@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import { SplitContext } from "./SplitContext"
+import { SplitContext } from "./splitContext"
 
 
 function SplitContextProvider({ children }) {
