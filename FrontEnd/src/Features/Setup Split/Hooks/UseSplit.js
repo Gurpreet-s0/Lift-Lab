@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SplitContext } from "../Context/SplitContext";
+import { SplitContext } from "../Context/splitContext";
 import { getExercises, getSplit, uploadSplit } from "../SetUp.services";
 import UseAuth from "../../Auth/Hooks/UseAuth";
 
