@@ -5,14 +5,14 @@ import { ChevronDown, ChevronRight } from "lucide-react"
 const DashBoard = () => {
 
     const { todaysplit, previousSession, getPreviousSessionHandler, dashLoad, getTodaySplitHandler } = UseTodaySplit()
-    console.log(todaysplit?.workoutName);
+
     const [openExercise, setOpenExercise] = useState(null)
     useEffect(() => {
         getTodaySplitHandler()
         getPreviousSessionHandler({ workoutName: todaysplit?.workoutName })
     }, [])
 
-    console.log(previousSession);
+
 
     return (
         dashLoad ? <Loading /> :

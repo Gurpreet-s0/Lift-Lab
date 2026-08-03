@@ -283,7 +283,7 @@ async function getPreviousSessionController(req, res) {
     try {
         const user = req.user.id
         const workoutName = req.params.workoutName
-        console.log(workoutName);
+
         
         const previousSession = await workoutSessionModel.findOne({
             user: user,
