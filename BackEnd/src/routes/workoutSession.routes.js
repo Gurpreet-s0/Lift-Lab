@@ -1,6 +1,6 @@
 const express = require("express")
 const identifyUser = require("../middleware/auth.middleware")
-const { startSessionController, logSessionController, finishSessionController, cancelSessionController, activeSessionController, getHistorySessionsController, getSessionController } = require("../controllers/session.controller")
+const { startSessionController, logSessionController, finishSessionController, cancelSessionController, activeSessionController, getHistorySessionsController, getSessionController, getPreviousSessionController } = require("../controllers/session.controller")
 
 const workoutSessionRouter = express.Router()
 
@@ -11,5 +11,6 @@ workoutSessionRouter.delete("/cancel/:sessionId", identifyUser, cancelSessionCon
 workoutSessionRouter.get("/activeSession", identifyUser, activeSessionController)
 workoutSessionRouter.get("/history", identifyUser, getHistorySessionsController)
 workoutSessionRouter.get("/:sessionId", identifyUser, getSessionController)
+workoutSessionRouter.get("/previousSession/:workoutName",identifyUser,getPreviousSessionController)
 
 module.exports = workoutSessionRouter

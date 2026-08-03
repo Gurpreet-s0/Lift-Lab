@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import UseSession from '../Hooks/UseSession'
 import UseTodaySplit from '../../DashBoard/Hooks/UseTodaySplit'
 import Loading from '../../Auth/components/Loading'
@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router'
 const Workout = () => {
 
     const { sessionId, sessionLoad, logExerciseHandler, finishSessionHandler } = UseSession()
-    const { todaysplit } = UseTodaySplit()
+    const { todaysplit ,getTodaySplitHandler } = UseTodaySplit()
     const [setsData, setsetsData] = useState([{
         weight: "",
         reps: "",
@@ -16,6 +16,9 @@ const Workout = () => {
     const [currentEx, setcurrentEx] = useState(0)
     const navigate = useNavigate()
 
+    useEffect(()=>{
+        getTodaySplitHandler()
+    },[])
 
     if (!todaysplit) {
         return <Loading />;
@@ -61,7 +64,6 @@ const Workout = () => {
     return (sessionLoad ? <Loading /> :
         <div className="min-h-dvh bg-background text-text px-4 pb-28 pt-6 lg:pl-58 lg:pr-6">
 
-            {/* Header */}
             <div className="max-w-4xl mx-auto">
                 <div className="bg-card border border-border rounded-3xl p-6 shadow-lg">
 
@@ -75,10 +77,10 @@ const Workout = () => {
                                 {todaysplit.workoutName} Day
                             </h1>
                         </div>
-
+{/* 
                         <div className="bg-primary/20 px-4 py-2 rounded-xl border border-primary/30">
                             🕒 Start Time
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="mt-6">
@@ -99,16 +101,13 @@ const Workout = () => {
 
                 </div>
             </div>
-
-            {/* Current Exercise */}
-
             <div className="max-w-4xl mx-auto mt-8">
 
                 <div className="bg-card border border-border rounded-3xl overflow-hidden">
 
                     <img
                         src={todaysplit.exercises[currentEx].exercise.image}
-                        className="w-full h-72 object-cover"
+                        className="w-full h-72 object-cover lg:h-full"
                     />
 
                     <div className="p-6">

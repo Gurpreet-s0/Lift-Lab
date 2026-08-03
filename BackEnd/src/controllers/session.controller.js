@@ -101,18 +101,30 @@ async function finishSessionController(req, res) {
             user,
             _id: sessionId
         })
+
         if (!session) {
             return res.status(404).json({
                 message: "Session not found"
             })
         }
 
-        if (session.status == "Completed" ) {
+        if (session.status == "Completed") {
             return res.status(400).json({
                 message: "Session is already finished"
             })
         }
 
+        let totalSets = 0
+        let volume = 0
+        session.exercisesDone.forEach((e) => {
+            totalSets += e.sets.length
+            e.sets.forEach((e) => {
+                volume += e.reps * e.weight
+            })
+        })
+
+        session.volume = volume
+        session.totalSets = totalSets
         session.status = "Completed"
         session.endedAt = Date.now()
         const totalTime = Math.floor((session.endedAt - session.startedAt) / 1000 / 60)
@@ -207,19 +219,19 @@ async function getHistorySessionsController(req, res) {
         const user = req.user.id
         const skip = (page - 1) * limit
 
-        const totalSessions = await workoutSessionModel.countDocuments({user})
-        const totalPages = Math.ceil(totalSessions/limit)
+        const totalSessions = await workoutSessionModel.countDocuments({ user })
+        const totalPages = Math.ceil(totalSessions / limit)
 
-        const sessions = await workoutSessionModel.find({user})
-        .skip(skip)
-        .limit(limit)
-        .sort({ startedAt: -1 })
-        .select("_id workoutName status duration startedAt endedAt")
+        const sessions = await workoutSessionModel.find({ user })
+            .skip(skip)
+            .limit(limit)
+            .sort({ startedAt: -1 })
+            .select("_id workoutName status duration startedAt endedAt")
 
-        if(!sessions){
+        if (!sessions) {
             return res.status(200).json({
-                message:"Start Your Workout Today",
-                sessions:[]
+                message: "Start Your Workout Today",
+                sessions: []
             })
         }
 
@@ -239,28 +251,60 @@ async function getHistorySessionsController(req, res) {
 
 }
 
-async function getSessionController(req,res){
+async function getSessionController(req, res) {
     try {
         const user = req.user.id
-    const sessionId = req.params.sessionId
+        const sessionId = req.params.sessionId
 
-    const session = await workoutSessionModel.findOne({
-        user,
-        _id:sessionId
-    }).populate("exercisesDone.exercise")
+        const session = await workoutSessionModel.findOne({
+            user,
+            _id: sessionId
+        }).populate("exercisesDone.exercise")
 
-    if(!session){
-        return res.status(404).json({
-            message:"Not any session found"
+        if (!session) {
+            return res.status(404).json({
+                message: "Not any session found"
+            })
+        }
+
+        res.status(200).json({
+            message: "Session Fetched Successfully",
+            session
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Internal Server Error"
         })
     }
+}
 
-    res.status(200).json({
-        message:"Session Fetched Successfully",
-        session
-    })
+async function getPreviousSessionController(req, res) {
+    try {
+        const user = req.user.id
+        const workoutName = req.params.workoutName
+        console.log(workoutName);
+        
+        const previousSession = await workoutSessionModel.findOne({
+            user: user,
+            workoutName: workoutName,
+            status: "Completed"
+        }).sort({ endedAt: -1 }).populate("exercisesDone.exercise")
+        
+
+        if (!previousSession) {
+            return res.status(404).json({
+                message: "No previous workout found"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Previous workout fetched successfully",
+            previousSession
+        });
+
     } catch (error) {
-         console.log(error);
+        console.log(error);
         return res.status(500).json({
             message: "Internal Server Error"
         })
@@ -274,5 +318,6 @@ module.exports = {
     cancelSessionController,
     activeSessionController,
     getHistorySessionsController,
-    getSessionController
+    getSessionController,
+    getPreviousSessionController
 }
