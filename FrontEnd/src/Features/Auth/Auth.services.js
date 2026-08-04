@@ -56,11 +56,10 @@ export async function getMe() {
 
 export async function logout() {
     try {
-        const res = await api.get("/api/auth/logout")
+        const res = await api.post("/api/auth/logout")
         return res.data
     }
     catch (err) {
         throw err.response?.data || err;
     }
 }
-

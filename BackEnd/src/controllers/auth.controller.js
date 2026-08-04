@@ -3,6 +3,24 @@ const blackListedModel = require("../models/blackList.model")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const AUTH_COOKIE_NAME = "jwt_token";
+const AUTH_COOKIE_MAX_AGE = 10 * 24 * 60 * 60 * 1000;
+
+const authCookieOptions = {
+  httpOnly: true,
+  secure: true,
+  sameSite: "None",
+  maxAge: AUTH_COOKIE_MAX_AGE,
+  path: "/",
+};
+
+const clearAuthCookieOptions = {
+  httpOnly: true,
+  secure: true,
+  sameSite: "None",
+  path: "/",
+};
+
 async function registerController(req, res) {
   const {
     username,
@@ -45,10 +63,10 @@ async function registerController(req, res) {
       username: user.username,
     },
     process.env.JWT_TOKEN,
-    { expiresIn: "3d" },
+    { expiresIn: "10d" },
   );
 
-  res.cookie("jwt_token", token)
+  res.cookie(AUTH_COOKIE_NAME, token, authCookieOptions)
 
   res.status(201).json({
     message: "User created Successfully",
@@ -87,9 +105,9 @@ async function loginController(req, res) {
   const token = jwt.sign({
     id: user._id,
     username: user.username,
-  }, process.env.JWT_TOKEN, { expiresIn: "3d" })
+  }, process.env.JWT_TOKEN, { expiresIn: "10d" })
 
-  res.cookie("jwt_token", token);
+  res.cookie(AUTH_COOKIE_NAME, token, authCookieOptions);
 
   res.status(200).json({
     message: "User Logged in",
@@ -102,8 +120,7 @@ async function loginController(req, res) {
       weight: user.weight,
       goal: user.goal,
       experience: user.experience
-    },
-    token
+    }
   })
 }
 
@@ -126,12 +143,14 @@ async function getMeController(req, res) {
 }
 
 async function logOutController(req, res) {
-  const token = req.cookies.jwt_token
-  res.clearCookie('jwt_token')
+  const token = req.cookies[AUTH_COOKIE_NAME]
+  res.clearCookie(AUTH_COOKIE_NAME, clearAuthCookieOptions)
 
-  await blackListedModel.create({
-    token: token
-  })
+  if (token) {
+    await blackListedModel.create({
+      token: token
+    })
+  }
   res.status(200).json({
     message: "LogOut successfully"
   })
