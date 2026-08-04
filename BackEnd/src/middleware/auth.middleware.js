@@ -1,13 +1,5 @@
 const jwt = require("jsonwebtoken");
-const app = require("../app")
-app.get("/test-cookie", (req, res) => {
-  res.cookie("test", "123", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-  });
-  res.json({ ok: true });
-});
+
 async function identifyUser(req, res, next) {
   const token = req.cookies.jwt_token
   console.log(req.headers.origin);

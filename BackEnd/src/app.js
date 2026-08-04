@@ -15,4 +15,12 @@ app.use(cookie())
 app.use("/api/auth",authRouter)
 app.use("/api/exercise",exerciseRouter)
 app.use("/api/session",workoutSessionRouter)
+app.get("/test-cookie", (req, res) => {
+  res.cookie("test", "123", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+  });
+  res.json({ ok: true });
+});
 module.exports = app
