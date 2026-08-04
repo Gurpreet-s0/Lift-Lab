@@ -51,8 +51,7 @@ async function registerController(req, res) {
 
   res.cookie("jwt_token", token, {
     httpOnly: true,
-    secure: true,
-    sameSite: "None",
+    
     maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
   });
 
@@ -98,8 +97,7 @@ async function loginController(req, res) {
 
   res.cookie("jwt_token", token, {
     httpOnly: true,
-    secure: true,
-    sameSite: "None",
+  
     maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
   });
 
