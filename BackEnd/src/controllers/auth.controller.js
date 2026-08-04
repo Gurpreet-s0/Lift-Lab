@@ -98,7 +98,7 @@ async function loginController(req, res) {
   }, process.env.JWT_TOKEN, { expiresIn: "10d" })
 
  res.cookie("jwt_token", token, {
-    httpOnly: true,
+    // httpOnly: true,
     secure: true,
     sameSite: "None",
     path: "/",
