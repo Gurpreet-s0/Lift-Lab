@@ -2,8 +2,9 @@ const jwt = require("jsonwebtoken");
 
 async function identifyUser(req, res, next) {
   const token = req.cookies.jwt_token
-  console.log(req.headers.origin);
-  console.log(req.headers.cookie);
+  console.log("origin:",req.headers.origin);
+  console.log("URL:", req.originalUrl);
+  console.log("COOKIE:", req.headers.cookie);
 
   if (!token) {
     return res.status(404).json({
