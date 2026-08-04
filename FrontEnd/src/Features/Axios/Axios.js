@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://lift-lab-06fc.onrender.com",
+  baseURL: "/",
   withCredentials: true,
 });
 

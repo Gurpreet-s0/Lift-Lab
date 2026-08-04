@@ -9,16 +9,16 @@ const AUTH_COOKIE_MAX_AGE = 10 * 24 * 60 * 60 * 1000;
 const authCookieOptions = {
   httpOnly: true,
   secure: true,
-  sameSite: "None",
+  sameSite: "Lax",
   maxAge: AUTH_COOKIE_MAX_AGE,
-  path: "/",
+  path: "/api",
 };
 
 const clearAuthCookieOptions = {
   httpOnly: true,
   secure: true,
-  sameSite: "None",
-  path: "/",
+  sameSite: "Lax",
+  path: "/api",
 };
 
 async function registerController(req, res) {
@@ -145,6 +145,7 @@ async function getMeController(req, res) {
 async function logOutController(req, res) {
   const token = req.cookies[AUTH_COOKIE_NAME]
   res.clearCookie(AUTH_COOKIE_NAME, clearAuthCookieOptions)
+  res.clearCookie(AUTH_COOKIE_NAME, { ...clearAuthCookieOptions, path: "/" })
 
   if (token) {
     await blackListedModel.create({
