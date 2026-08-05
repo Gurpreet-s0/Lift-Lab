@@ -43,3 +43,13 @@ export async function finishSession({sessionId}){
         console.log(err);
     }
 }
+
+export async function cancelSession({sessionId}) {
+    try {
+        const res = await api.delete(`/api/session/cancel/${sessionId}`)
+        return res.data
+    } catch (err) {
+        console.log(err);
+        
+    }
+}

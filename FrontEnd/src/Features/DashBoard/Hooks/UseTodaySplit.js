@@ -26,6 +26,7 @@ const UseTodaySplit = () => {
 
     useEffect(()=>{
         getTodaySplitHandler()
+        .then((res)=>res)
     },[])
     return ({ todaysplit, splitId, getTodaySplitHandler, previousSession, getPreviousSessionHandler, dashLoad })
 }
