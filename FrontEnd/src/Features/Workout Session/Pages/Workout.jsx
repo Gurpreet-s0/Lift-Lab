@@ -42,6 +42,8 @@ const Workout = () => {
             sets: setsData
         });
 
+        setcurrentEx(currentEx + 1)
+
         if (currentEx === todaysplit.exercises.length - 1) {
 
             await finishSessionHandler({ sessionId });
@@ -50,6 +52,7 @@ const Workout = () => {
 
             return;
         }
+
 
         setsetsData([
             {
@@ -220,7 +223,7 @@ const Workout = () => {
                             type='submit'
                             onClick={() => {
                                 handleSave()
-                                setcurrentEx(currentEx + 1)
+                                
                             }}
                             className="w-full mt-6 bg-primary text-black font-bold py-4 rounded-xl text-lg hover:scale-[1.01] transition"
                         >

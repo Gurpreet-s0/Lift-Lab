@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { SessionContext } from "../Context/session.context";
-import { startSession,logExercise,finishSession } from "../session.services";
+import { startSession,logExercise,finishSession, cancelSession } from "../session.services";
 
 
 const UseSession = () => {
@@ -9,7 +9,9 @@ const UseSession = () => {
     function startSessionHandler({workoutName, workoutSplit}){
         setsessionLoad(true)
         return startSession({workoutName,workoutSplit})
-        .then((res)=>setsessionId(res.sessionId))
+        .then((res)=>{
+          setsessionId(res.sessionId)
+        })
         .finally(()=>setsessionLoad(false))
     }
 
@@ -28,9 +30,14 @@ const UseSession = () => {
     .finally(()=>setsessionLoad(false))
   }
 
+  function cancelSessionHandler({sessionId}){
+    setsessionLoad(true)
+    return cancelSession({sessionId})
+    .finally(()=>setsessionLoad(false))
+  }
 
 
-  return {sessionId,startSessionHandler,sessionLoad,logExerciseHandler,finishSessionHandler,finishedData}
+  return {sessionId,startSessionHandler,sessionLoad,logExerciseHandler,finishSessionHandler,finishedData,cancelSessionHandler}
 }
 
 export default UseSession

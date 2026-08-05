@@ -8,7 +8,6 @@ const SessionContextProvider = ({children}) => {
     const [finishedData, setfinishedData] = useState(null)
 
     useEffect(()=>{
-      setsessionLoad(true)
       activeSession()
       .then((res)=>setsessionId(res.sessionId))
       .finally(()=>setsessionLoad(false))

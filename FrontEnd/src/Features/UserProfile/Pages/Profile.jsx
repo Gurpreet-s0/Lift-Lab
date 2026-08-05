@@ -14,7 +14,8 @@ import {
 import UseAuth from '../../Auth/Hooks/UseAuth'
 
 const Profile = () => {
-  const { user } = UseAuth()
+  const { user, logOutHandler } = UseAuth()
+  
 
   const heightInMeters = user?.height ? user.height / 100 : 0
   const bmi = heightInMeters && user?.weight
@@ -45,11 +46,20 @@ const Profile = () => {
           <p className='text-sm font-semibold uppercase text-primary'>Account</p>
           <h1 className='mt-1 text-3xl font-bold text-text sm:text-4xl'>Profile</h1>
         </div>
+        <div className='flex justify-center items-center gap-5 w-full'>
 
-        <button className='inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-bold text-background transition-colors hover:bg-primary-hover'>
-          <Pencil className='size-4 text-background' />
-          Edit Profile
-        </button>
+          <button className='w-1/2 inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-bold text-background transition-colors hover:bg-primary-hover'>
+            <Pencil className='size-4 text-background' />
+            Edit Profile
+          </button>
+          <button onClick={()=>{
+            logOutHandler()
+          }} className='w-1/2 inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-error px-4 text-sm font-bold text-background transition-colors hover:bg-[#e96060]'>
+            <Pencil className='size-4 text-background' />
+            Log Out
+          </button>
+
+        </div>
       </div>
 
       <section className='overflow-hidden rounded-2xl border border-border bg-card'>
